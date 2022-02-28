@@ -8,6 +8,8 @@ chmod +x ./rioCDGen.py # do this once
 ./rioCDGen.py
 ```
 
+**note**: run this in the project directory
+
 or
 
 ```
