@@ -20,6 +20,7 @@ python3 ./rioCDGEN.py
 ## Platforms
 * Linux
 * MaxOS (hopefully)
+* Windows (in theory)
 
 ## TODO:
 * more customizability
