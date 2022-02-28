@@ -31,6 +31,21 @@ def getOptionString(filePath: str) -> str:
     
     return optionsString
 
+# find all cpp files
+def getAllCppFiles():
+    foundFiles = []
+    for root, dirs, files in os.walk(os.getcwd()):
+        for file in files:
+            if file.endswith(".cpp"):
+                foundFiles.append(os.path.join(root, file))
+
+    return foundFiles
+
+def generateCompileCommands(compilerPath: str, optionString: str):
+    with open("compile_commands.json", mode='w') as compilationDatabaseFile:
+        for file in getAllCppFiles():
+            print(" ", file)
+
 def main():
 
     # find compiler
@@ -50,8 +65,16 @@ def main():
     print(f"using {optionsFilePath}")
 
     # get the options
-    print("getting compiler options... ")
+    print("getting compiler options... ", end="")
     compilerOptions = getOptionString(optionsFilePath)
+    if compilerOptions == None:
+        print("could not get compiler options for some reason!")
+        exit(1)
+    print("success")
+
+    #generate the file
+    print("generating compile_commands.json... ")
+    generateCompileCommands(compilerPath, compilerOptions)
 
 if __name__ == "__main__":
     main()
