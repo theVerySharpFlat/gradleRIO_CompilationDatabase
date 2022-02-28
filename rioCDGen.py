@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/use/bin/env python3
 import os, sys
 import datetime
 import json
@@ -29,7 +29,7 @@ def getOptionString(filePath: str) -> str:
     with open(filePath) as file:
         dat = file.read()
         optionsString = dat.replace("\n", " ")
-    
+
     return optionsString
 
 # find all cpp files
