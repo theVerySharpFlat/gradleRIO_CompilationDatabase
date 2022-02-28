@@ -8,7 +8,7 @@ buildType = "Debug"
 
 # finds the roboRIO g++ cross compiler
 def findCompiler() -> str:
-    name = f"/{year}/roborio/bin/arm-frc{year}-linux-gnueabi-g++"
+    name = os.path.sep + os.path.join(f"{year}", "roborio", "bin", f"arm-frc{year}-linux-gnueabi-g++")
     path = os.path.expanduser('~')
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -17,7 +17,7 @@ def findCompiler() -> str:
 
 # find the options file
 def findOptionsTXT() -> str():
-    name = f"compileFrcUserProgram{buildType}ExecutableFrcUserProgramCpp/options.txt"
+    name = os.path.join(f"compileFrcUserProgram{buildType}ExecutableFrcUserProgramCpp", "options.txt")
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
             if name in os.path.join(root, file):
@@ -54,8 +54,10 @@ def generateCompileCommands(compilerPath: str, optionString: str):
         objectFile = findFile(objectFile, os.path.join(os.getcwd(), "build"))
 
         if objectFile == None:
-            print(f"failed to find object file for cpp file \"{file}\". Skipping...")
+            print(f"  failed to find object file for cpp file \"{file}\". Skipping...")
             continue
+        else:
+            print(f"  generating definition for {file}")
 
         fileObj = {
             "directory": os.path.join(os.getcwd(), "build"),
@@ -65,6 +67,7 @@ def generateCompileCommands(compilerPath: str, optionString: str):
 
         model.append(fileObj)
 
+    print(f"dumping to {os.path.join(os.getcwd(), 'compile_commands.json')}")
     with open("compile_commands.json", mode='w') as compilationDatabaseFile:
         json.dump(model, compilationDatabaseFile)
 
