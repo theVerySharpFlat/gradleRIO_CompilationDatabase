@@ -1,6 +1,7 @@
 #!/bin/python3
 import os, sys
 import datetime
+import json
 
 year = datetime.date.today().year
 buildType = "Debug"
@@ -41,10 +42,31 @@ def getAllCppFiles():
 
     return foundFiles
 
+def findFile(filename: str, filepath: str) -> str:
+    for root, dirs, files in os.walk(filepath):
+        if filename in files:
+            return os.path.join(root, filename)
+
 def generateCompileCommands(compilerPath: str, optionString: str):
+    model = []
+    for file in getAllCppFiles():
+        objectFile = os.path.basename(file).replace(".cpp", ".o")
+        objectFile = findFile(objectFile, os.path.join(os.getcwd(), "build"))
+
+        if objectFile == None:
+            print(f"failed to find object file for cpp file \"{file}\". Skipping...")
+            continue
+
+        fileObj = {
+            "directory": os.path.join(os.getcwd(), "build"),
+            "command": f"{compilerPath} {optionString} -o {objectFile} {file}",
+            "file": f"{file}"
+        }
+
+        model.append(fileObj)
+
     with open("compile_commands.json", mode='w') as compilationDatabaseFile:
-        for file in getAllCppFiles():
-            print(" ", file)
+        json.dump(model, compilationDatabaseFile)
 
 def main():
 
