@@ -8,6 +8,8 @@ chmod +x ./rioCDGen.py # do this once
 ./rioCDGen.py
 ```
 
+**note**: run this in the project directory
+
 or
 
 ```
@@ -20,6 +22,7 @@ python3 ./rioCDGEN.py
 ## Platforms
 * Linux
 * MaxOS (hopefully)
+* Windows (in theory)
 
 ## TODO:
 * more customizability

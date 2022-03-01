@@ -1,6 +1,5 @@
-#!/bin/python3
-import os
-import sys
+#!/usr/bin/env python3
+import os, sys
 import datetime
 import json
 import argparse
