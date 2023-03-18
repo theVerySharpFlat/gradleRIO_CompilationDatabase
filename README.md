@@ -34,10 +34,10 @@ optional arguments:
 
 ## Platforms
 * Linux
-* MaxOS (hopefully)
-* Windows (in theory)
+* MaxOS
+* Windows
 
 ## TODO:
 * ~~more customizability~~ implemented in [f05923c](https://github.com/theVerySharpFlat/gradleRIO_CompilationDatabase/commit/f9a073cb6d5377552a043b9681e57d9ad644b616) 
 * make it a pip package?
-* make it cross platform
+* ~~make it cross platform~~
