@@ -52,7 +52,7 @@ def findCompiler() -> str:
 
 def findOptionsTXT() -> str():
     name = os.path.join(
-        f"compileFrcUserProgram{buildType}ExecutableFrcUserProgramCpp", "options.txt")
+        f"compileFrcUserProgramLinuxathena{buildType}ExecutableFrcUserProgramCpp", "options.txt")
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
             if name in os.path.join(root, file):
