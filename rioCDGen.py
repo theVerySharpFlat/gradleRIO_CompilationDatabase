@@ -41,7 +41,11 @@ def findCompiler() -> str:
     name = os.path.sep + \
         os.path.join(f"{year}", "roborio", "bin",
                      f"arm-frc{year}-linux-gnueabi-g++")
-    path = os.path.expanduser('~')
+    
+    if os.name == 'nt' and os.path.isdir("C:\\Users\\Public\\wpilib"):
+        path = os.path.expanduser('~Public')
+    else:
+        path = os.path.expanduser('~')
     for root, dirs, files in os.walk(path):
         for file in files:
             if name in os.path.join(root, file):
