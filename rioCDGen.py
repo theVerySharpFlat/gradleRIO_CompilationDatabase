@@ -11,14 +11,22 @@ argParser.add_argument("--compiler", type=str,
                        help="path to the cross-compiler that gradleRIO uses. If not specified, the script will search for it")
 argParser.add_argument("--build-type", "-bt",
                        choices=["Debug", "Release"], default="Debug", help="The type of build. Can be Debug or Release. Defaults to Debug")
+argParser.add_argument("--binary-name", "-bn", type=str, default="FrcUserProgram", help="The name of the binary to generate compile_commands for. Should be capitalized")
+argParser.add_argument("--platform", "-pt", type=str, help="The target platform/arch of the binary. For roborio, enter 'Linuxathena'. For OSX, enter Osxuniversal. You can check the build/tmp directory to confirm the desktop arch", default="Linuxathena")
+argParser.add_argument("--desktop", action="store_true", help="Whether or not desktop builds are enabled for this project", default=False)
 argParser.add_argument("--year", "-y", type=int,
                        help="The year of the toolchain/project. Defaults to the current year", default=datetime.date.today().year)
 argParser.add_argument("--source", "-S", "-s", type=str,
                        help="The root directory of the project(should be the directory with your build.gradle file. Defaults to cwd", default=os.getcwd())
+argParser.add_argument("--binary-type", "-bnt", type=str, default="Executable", choices=["Executable", "SharedLibrary", "StaticLibrary"], help="The type of binary that the target task builds")
 args = argParser.parse_args()
 
 year = args.year
-buildType = args.build_type
+build_type = args.build_type
+platform = args.platform
+desktop_enabled = args.desktop
+binary_name = args.binary_name
+binary_type = args.binary_type
 
 if not os.path.exists(args.source):
     print("project directory does not exist!")
@@ -28,9 +36,8 @@ elif not os.path.exists(os.path.join(args.source, "build.gradle")):
     exit(1)
 else:
     os.chdir(args.source)
+
 # finds the roboRIO g++ cross compiler
-
-
 def findCompiler() -> str:
     if args.compiler:
         if os.path.exists(args.compiler):
@@ -51,12 +58,17 @@ def findCompiler() -> str:
             if name in os.path.join(root, file):
                 return os.path.join(root, file)
 
+
+def predictCompileTaskName(target="FrcUserProgram", platform="Linuxathena", binType="Executable", buildType="Debug", desktopEnabled=False) -> str:
+    computedPlatformName = platform if desktopEnabled else ""
+    return f"compile{target}{computedPlatformName}{buildType}{binType}{target}Cpp"
+
 # find the options file
-
-
-def findOptionsTXT() -> str():
-    name = os.path.join(
-        f"compileFrcUserProgram{buildType}ExecutableFrcUserProgramCpp", "options.txt")
+def findOptionsTXT() -> str:
+    # name = os.path.join(
+    #     f"compileFrcUserProgramLinuxathena{buildType}ExecutableFrcUserProgramCpp", "options.txt")
+    name = predictCompileTaskName(target = binary_name, platform = platform, binType=binary_type, buildType=build_type, desktopEnabled=desktop_enabled)
+    print(f"under task name\"{name}\"... ")
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
             if name in os.path.join(root, file):
@@ -74,8 +86,6 @@ def getOptionString(filePath: str) -> str:
     return optionsString
 
 # find all cpp files
-
-
 def getAllCppFiles():
     foundFiles = []
     for root, dirs, files in os.walk(os.getcwd()):
