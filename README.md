@@ -1,4 +1,5 @@
 # gradleRIO_CompilationDatabase
+# DEPRECATING! [This](https://github.com/wpilibsuite/gradle-cpp-vscode/pull/33) pull request takes away the need for this script!
 
 This will generate a `compile_commands.json` file based on a gradleRIO project.
 
